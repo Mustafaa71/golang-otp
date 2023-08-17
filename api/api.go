@@ -4,7 +4,6 @@ import (
 	"example/otpAPI/otp"
 	"fmt"
 	"net/http"
-	"os"
 
 	"github.com/gin-gonic/gin"
 )
@@ -13,13 +12,10 @@ func Router() {
 
 	router := gin.Default()
 
-	port := os.Getenv("PORT")
-
 	router.GET("/", displayOTPCode)
-	router.GET("/env", env)
 	router.POST("/verify", verifyOTPCode)
 
-	router.Run("0.0.0.0:" + port)
+	router.Run()
 }
 
 type otpStruct struct {
@@ -27,11 +23,6 @@ type otpStruct struct {
 }
 
 var storedOTP string
-
-func env(c *gin.Context) {
-	testENV := os.Getenv("TEST_ENV")
-	c.String(http.StatusOK, testENV)
-}
 
 func getOTPcode() string {
 	key := otp.GenerateOTPKey()
@@ -48,7 +39,7 @@ func displayOTPCode(c *gin.Context) {
 }
 
 func verifyOTPCode(c *gin.Context) {
-	userInput := c.PostForm("otpCode")
+	userInput := c.Query("otpCode")
 	if userInput == storedOTP {
 		fmt.Println("Authentication successful!")
 		c.String(http.StatusOK, "Authentication successful!")
@@ -56,4 +47,5 @@ func verifyOTPCode(c *gin.Context) {
 		fmt.Println("Authentication failed. Invalid OTP code.")
 		c.String(http.StatusUnauthorized, "Authentication failed. Invalid OTP code.")
 	}
+
 }
