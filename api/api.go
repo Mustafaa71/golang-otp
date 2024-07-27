@@ -2,7 +2,6 @@ package api
 
 import (
 	"example/otpAPI/otp"
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -41,10 +40,9 @@ func displayOTPCode(c *gin.Context) {
 func verifyOTPCode(c *gin.Context) {
 	userInput := c.Query("otpCode")
 	if userInput == storedOTP {
-		fmt.Println("Authentication successful!")
 		c.String(http.StatusOK, "Authentication successful!")
 	} else {
-		fmt.Println("Authentication failed. Invalid OTP code.")
+
 		c.String(http.StatusUnauthorized, "Authentication failed. Invalid OTP code.")
 	}
 

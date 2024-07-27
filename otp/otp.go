@@ -13,10 +13,11 @@ const (
 )
 
 func GenerateOTPKey() *otp.Key {
-	key, err := totp.Generate(totp.GenerateOpts{
-		Issuer:      userName,
-		AccountName: accountName,
-	})
+	key, err := totp.Generate(
+		totp.GenerateOpts{
+			Issuer:      userName,
+			AccountName: accountName,
+		})
 
 	if err != nil {
 		panic(err)
